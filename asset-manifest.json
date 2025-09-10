@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/wings-cafe-inventory/static/css/main.ad2ccf7b.css",
+    "main.js": "/wings-cafe-inventory/static/js/main.3c76b452.js",
+    "index.html": "/wings-cafe-inventory/index.html",
+    "main.ad2ccf7b.css.map": "/wings-cafe-inventory/static/css/main.ad2ccf7b.css.map",
+    "main.3c76b452.js.map": "/wings-cafe-inventory/static/js/main.3c76b452.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ad2ccf7b.css",
+    "static/js/main.3c76b452.js"
+  ]
+}
