@@ -1,0 +1,10 @@
+.app-footer {
+  text-align: center;
+  padding: 12px 0;
+  background-color: #f4f7fb;
+  color: #657786;
+  border-top: 1px solid #dfe8f2;
+  position: relative; /* or fixed at bottom if you want it sticky */
+  width: 100%;
+  bottom: 0;
+}

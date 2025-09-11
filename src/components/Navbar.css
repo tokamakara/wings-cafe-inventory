@@ -1,0 +1,95 @@
+/* ===== Navbar.css ===== */
+.navbar {
+  background: #1f2937; /* dark gray */
+  color: #fff;
+  padding: 8px 10px;  /* shorter height & horizontal padding */
+  margin: 0 10px;     /* 10px margin left and right */
+  border-bottom: 2px solid #111827;
+  border-radius: 6px; /* optional: rounded edges */
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-brand h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #facc15; /* yellow accent */
+}
+
+.nav-menu {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-btn {
+  background: transparent;
+  border: none;
+  padding: 6px 10px; /* slightly smaller */
+  color: #d1d5db;
+  font-size: 15px;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+  border-radius: 6px;
+}
+
+.nav-btn:hover {
+  color: #fff;
+  background: #374151;
+}
+
+.nav-btn.active {
+  background: #2563eb;
+  color: #fff;
+}
+
+.nav-contact {
+  font-size: 12px;
+  color: #9ca3af;
+  line-height: 1.4;  /* spacing between lines */
+  text-align: right; /* optional: right-aligned */
+}
+
+/* ===== Mobile menu ===== */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.menu-toggle span {
+  display: block;
+  width: 22px;
+  height: 3px;
+  background: #facc15;
+  border-radius: 2px;
+}
+
+/* Responsive: collapse menu */
+@media (max-width: 768px) {
+  .nav-menu {
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .nav-menu.active {
+    display: flex;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  .nav-contact {
+    text-align: center;
+    margin-top: 8px;
+  }
+}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Notification from "./Notification";
+import "./Inventory.css";
 
 export default function Inventory({ products, addProduct, updateProduct, deleteProduct, restockProduct }) {
   const [form, setForm] = useState({ name: "", description: "", category: "", price: "", quantity: "" });
@@ -48,6 +49,7 @@ export default function Inventory({ products, addProduct, updateProduct, deleteP
     setEditingId(p.id);
     setForm({ name: p.name, description: p.description, category: p.category, price: p.price, quantity: p.quantity });
     setNotification({ type: "", message: "" });
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
   }
 
   function handleRestockPrompt(p) {
@@ -62,8 +64,48 @@ export default function Inventory({ products, addProduct, updateProduct, deleteP
   }
 
   return (
-    <div>
+    <div className="inventory">
       <h1>Inventory</h1>
+
+      {/* Product Table */}
+      <div className="card product-list-card">
+        <h3>Product List</h3>
+        <div className="table-wrap">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {products.map(p => (
+                <tr key={p.id}>
+                  <td>{p.name}</td>
+                  <td>{p.description}</td>
+                  <td>{p.category}</td>
+                  <td>{p.price}</td>
+                  <td>{p.quantity}</td>
+                  <td>
+                    <button className="btn ghost" onClick={() => startEdit(p)}>Update</button>
+                    <button className="btn danger" onClick={() => { if(window.confirm("Delete product?")) deleteProduct(p.id); }}>Delete</button>
+                    <button className="btn primary" onClick={() => handleRestockPrompt(p)}>Restock</button>
+                  </td>
+                </tr>
+              ))}
+              {products.length === 0 && (
+                <tr>
+                  <td colSpan="6" className="small">No products available.</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       {/* Notification */}
       {notification.message && (
@@ -75,16 +117,13 @@ export default function Inventory({ products, addProduct, updateProduct, deleteP
       )}
 
       {/* Add / Update Form */}
-      <div className="card">
-        <h3>{editingId ? "Update product" : "Add new product"}</h3>
+      <div className="card add-product-card">
+        <h3>{editingId ? "Update Product" : "Add New Product"}</h3>
         <div className="form-row">
           <input
             placeholder="Product name"
             value={form.name}
-            onChange={e => {
-              const sanitized = e.target.value.replace(/[^A-Za-z\s]/g, ""); // letters & spaces only
-              setForm({ ...form, name: sanitized });
-            }}
+            onChange={e => setForm({ ...form, name: e.target.value.replace(/[^A-Za-z\s]/g, "") })}
           />
           <input
             placeholder="Description"
@@ -100,65 +139,25 @@ export default function Inventory({ products, addProduct, updateProduct, deleteP
             placeholder="Price (LSL)"
             type="number"
             value={form.price}
-            onChange={e => {
-              const sanitized = e.target.value.replace(/[^\d.]/g, ""); // digits & dot only
-              setForm({ ...form, price: sanitized });
-            }}
+            onChange={e => setForm({ ...form, price: e.target.value.replace(/[^\d.]/g, "") })}
           />
           <input
             placeholder="Initial quantity"
             type="number"
             value={form.quantity}
-            onChange={e => {
-              const sanitized = e.target.value.replace(/[^\d]/g, ""); // digits only
-              setForm({ ...form, quantity: sanitized });
-            }}
+            onChange={e => setForm({ ...form, quantity: e.target.value.replace(/[^\d]/g, "") })}
           />
-          <button className="btn primary" onClick={handleAddOrUpdate}>
-            {editingId ? "Save" : "Add"}
-          </button>
-          {editingId && (
-            <button
-              className="btn ghost"
-              onClick={() => setEditingId(null) || setForm({ name: "", description: "", category: "", price: "", quantity: "" })}
-            >
-              Cancel
+          <div className="form-buttons">
+            <button className="btn primary" onClick={handleAddOrUpdate}>
+              {editingId ? "Save" : "Add"}
             </button>
-          )}
+            {editingId && (
+              <button className="btn ghost" onClick={() => setEditingId(null) || setForm({ name: "", description: "", category: "", price: "", quantity: "" })}>
+                Cancel
+              </button>
+            )}
+          </div>
         </div>
-      </div>
-
-      {/* Product Table */}
-      <div className="card">
-        <h3>Product List</h3>
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map(p => (
-              <tr key={p.id}>
-                <td>{p.name}</td>
-                <td>{p.description}</td>
-                <td>{p.category}</td>
-                <td>{p.price}</td>
-                <td>{p.quantity}</td>
-                <td>
-                  <button className="btn ghost" onClick={() => startEdit(p)}>Update</button>
-                  <button className="btn danger" onClick={() => { if(window.confirm("Delete product?")) deleteProduct(p.id); }}>Delete</button>
-                  <button className="btn primary" onClick={() => handleRestockPrompt(p)}>Restock</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
       </div>
     </div>
   );

@@ -1,0 +1,105 @@
+/* Dashboard.css - isolated dashboard styles */
+
+.dashboard {
+  width: 100%;
+}
+
+/* Title */
+.dashboard-title {
+  margin: 0 0 12px 0;
+  font-size: 24px;
+  color: #23303b;
+}
+
+/* Stats row (keeps your existing .stats-row semantics but scoped) */
+.dashboard-stats-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.dashboard-stat {
+  flex: 1;
+  padding: 16px;
+  border-radius: 8px;
+  background: linear-gradient(180deg,#f7fbff,#ffffff);
+  box-shadow: 0 2px 8px rgba(18,36,54,0.04);
+  min-width: 170px;
+}
+
+.dashboard-stat h3 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: #334e68;
+}
+
+.dashboard-stat p {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f1724;
+}
+
+/* Transactions card */
+.transactions-card .table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 8px;
+}
+
+.transactions-card .table th,
+.transactions-card .table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #eef3f8;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.transactions-card .table th {
+  background: #f6fbff;
+  font-weight: 600;
+  color: #2a4a6a;
+}
+
+.transactions-card .table tr:hover {
+  background: #f9fcff;
+}
+
+/* Low stock row highlight (keeps parity with app-wide rule) */
+.low-stock-row td {
+  background: #fff6f6 !important;
+  color: #7a1b1b;
+}
+
+/* Responsive table wrapper */
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Small utility */
+.small {
+  font-size: 13px;
+  color: #657786;
+}
+
+/* Screen-reader only (used for table caption) */
+.sr-only {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* Collapse stats to column on small screens */
+@media (max-width: 700px) {
+  .dashboard-stats-row {
+    flex-direction: column;
+  }
+
+  .dashboard-stat {
+    min-width: auto;
+  }
+}

@@ -1,0 +1,127 @@
+/* Customers.css - isolated customer management styles */
+
+.customers {
+  width: 100%;
+}
+
+.customer-list-card,
+.add-customer-card {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(18,36,54,0.05);
+}
+
+h1 {
+  margin-bottom: 12px;
+  font-size: 24px;
+  color: #23303b;
+}
+
+h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #334e68;
+}
+
+/* Table */
+.table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 10px 8px;
+  border-bottom: 1px solid #eef3f8;
+  text-align: left;
+}
+
+.table th {
+  background: #f6fbff;
+  font-weight: 600;
+  color: #2a4a6a;
+}
+
+.table tr:hover {
+  background: #f9fcff;
+}
+
+.small {
+  font-size: 13px;
+  color: #657786;
+  text-align: center;
+}
+
+/* Form row */
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.form-row input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  font-size: 14px;
+}
+
+/* Buttons */
+.form-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+}
+
+.btn.primary {
+  background-color: #0f1724;
+  color: #fff;
+}
+
+.btn.ghost {
+  background: transparent;
+  border: 1px solid #0f1724;
+  color: #0f1724;
+}
+
+.btn.danger {
+  background-color: #d14343;
+  color: #fff;
+}
+
+/* Search input */
+.search-input {
+  padding: 6px;
+  width: 100%;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 700px) {
+  .form-row {
+    flex-direction: column;
+  }
+
+  .form-buttons {
+    flex-direction: column;
+  }
+}

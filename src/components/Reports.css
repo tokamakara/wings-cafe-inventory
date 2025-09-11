@@ -1,0 +1,51 @@
+.card {
+  background-color: #fff;
+  padding: 18px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.filters label {
+  margin-right: 8px;
+  font-weight: 500;
+}
+
+.filters select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f5f5f5;
+}
+
+.small {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.total-sales {
+  margin-top: 10px;
+  font-size: 1rem;
+}

@@ -1,16 +1,17 @@
 import React, { useState } from "react";
+import "./Reports.css";
 
 export default function Reports({ sales, transactions, products, salesByPeriod }) {
   const [period, setPeriod] = useState("daily");
 
   const filteredSales = salesByPeriod(period);
-
   const totalSales = filteredSales.reduce((sum, s) => sum + s.total, 0);
 
   return (
     <div>
       <h1>Reports</h1>
 
+      {/* Sales Report */}
       <div className="card">
         <div className="filters">
           <label>Sales Period:</label>
@@ -22,11 +23,17 @@ export default function Reports({ sales, transactions, products, salesByPeriod }
         </div>
 
         <h3>Sales Report</h3>
-        {filteredSales.length === 0 ? <p className="small">No sales recorded for this period.</p> :
+        {filteredSales.length === 0 ? (
+          <p className="small">No sales recorded for this period.</p>
+        ) : (
           <table className="table">
             <thead>
               <tr>
-                <th>ID</th><th>Customer</th><th>Items</th><th>Total (LSL)</th><th>Date</th>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total (LSL)</th>
+                <th>Date</th>
               </tr>
             </thead>
             <tbody>
@@ -47,16 +54,25 @@ export default function Reports({ sales, transactions, products, salesByPeriod }
               ))}
             </tbody>
           </table>
-        }
-        <p><strong>Total Sales for period: LSL {totalSales.toFixed(2)}</strong></p>
+        )}
+        <p className="total-sales"><strong>Total Sales for period: LSL {totalSales.toFixed(2)}</strong></p>
       </div>
 
+      {/* Transactions */}
       <div className="card">
         <h3>All Transactions</h3>
-        {transactions.length === 0 ? <p className="small">No transactions recorded.</p> :
+        {transactions.length === 0 ? (
+          <p className="small">No transactions recorded.</p>
+        ) : (
           <table className="table">
             <thead>
-              <tr><th>Type</th><th>Product</th><th>Quantity</th><th>Note</th><th>Date</th></tr>
+              <tr>
+                <th>Type</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Note</th>
+                <th>Date</th>
+              </tr>
             </thead>
             <tbody>
               {transactions.slice().reverse().map(tx => {
@@ -73,7 +89,7 @@ export default function Reports({ sales, transactions, products, salesByPeriod }
               })}
             </tbody>
           </table>
-        }
+        )}
       </div>
     </div>
   );

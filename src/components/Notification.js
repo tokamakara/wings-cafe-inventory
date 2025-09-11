@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import "./Notification.css";
 
 /**
  * Notification component with auto-hide support.
