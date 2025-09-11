@@ -1,32 +1,32 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "./components/Navbar";   // ✅ Sidebar removed
+import Navbar from "./components/Navbar";
 import Dashboard from "./components/Dashboard";
 import Inventory from "./components/Inventory";
 import Sales from "./components/Sales";
-import Customers from "./components/Customers";   // ✅ singular
-import Reports from "./components/Reports";     // ✅ matches actual file name
-import Footer from "./components/Footer"
+import Customers from "./components/Customers";
+import Reports from "./components/Reports";
+import Footer from "./components/Footer";
 
 const LS_KEY = "wings_cafe_db_v1";
 
-// ✅ Default data (pre-seeded products & customers)
+// Default data
 const defaultData = {
   products: [
-      // Beverages
+    // Beverages
     { id: "b1", name: "Cappuccino", description: "Espresso with steamed milk and foam", category: "Beverage", price: 35, quantity: 30 },
     { id: "b2", name: "Latte", description: "Espresso with steamed milk", category: "Beverage", price: 40, quantity: 25 },
     { id: "b3", name: "Espresso", description: "Strong black coffee", category: "Beverage", price: 25, quantity: 20 },
     { id: "b4", name: "Americano", description: "Espresso with hot water", category: "Beverage", price: 30, quantity: 20 },
     { id: "b5", name: "Hot Chocolate", description: "Rich chocolate with steamed milk", category: "Beverage", price: 35, quantity: 15 },
     { id: "b6", name: "Green Tea", description: "Refreshing green tea", category: "Beverage", price: 20, quantity: 25 },
-  
+
     // Food
     { id: "f1", name: "Blueberry Muffin", description: "Soft muffin with blueberries", category: "Food", price: 20, quantity: 20 },
     { id: "f2", name: "Croissant", description: "Buttery French pastry", category: "Food", price: 25, quantity: 25 },
     { id: "f3", name: "Ham & Cheese Sandwich", description: "Fresh sandwich with ham, cheese, and veggies", category: "Food", price: 50, quantity: 15 },
     { id: "f4", name: "Chicken Wrap", description: "Grilled chicken with lettuce and sauce", category: "Food", price: 55, quantity: 15 },
     { id: "f5", name: "Caesar Salad", description: "Fresh romaine with Caesar dressing", category: "Food", price: 45, quantity: 10 },
-  
+
     // Desserts
     { id: "d1", name: "Chocolate Cake Slice", description: "Rich chocolate cake slice", category: "Dessert", price: 35, quantity: 10 },
     { id: "d2", name: "Cheesecake Slice", description: "Creamy cheesecake with biscuit base", category: "Dessert", price: 40, quantity: 10 },
@@ -36,7 +36,6 @@ const defaultData = {
     { id: "s1", name: "French Fries", description: "Crispy golden fries", category: "Snack", price: 25, quantity: 20 },
     { id: "s2", name: "Onion Rings", description: "Fried onion rings with dip", category: "Snack", price: 30, quantity: 15 },
     { id: "s3", name: "Mozzarella Sticks", description: "Cheesy fried sticks", category: "Snack", price: 35, quantity: 15 }
-
   ],
   customers: [
     { id: "c1", name: "Thabo Mokoena", email: "mthabo@gmail.com", phone: "58000001" },
@@ -48,7 +47,21 @@ const defaultData = {
   transactions: []
 };
 
-// ✅ Load data from localStorage or merge with defaults
+// ---------------- LocalStorage helpers ----------------
+function mergeProducts(products) {
+  const map = new Map();
+  products.forEach(p => {
+    const key = p.name.trim().toLowerCase();
+    if (map.has(key)) {
+      const existing = map.get(key);
+      map.set(key, { ...p, quantity: existing.quantity + p.quantity, id: existing.id });
+    } else {
+      map.set(key, { ...p });
+    }
+  });
+  return Array.from(map.values());
+}
+
 function loadData() {
   try {
     const raw = localStorage.getItem(LS_KEY);
@@ -58,23 +71,21 @@ function loadData() {
     }
     const saved = JSON.parse(raw);
 
-    // Merge products
-    const mergedProducts = defaultData.products.map(def => {
-      const existing = saved.products?.find(p => p.id === def.id);
-      return existing ? { ...def, ...existing } : def;
-    });
-    const userProducts = saved.products?.filter(p => !defaultData.products.find(d => d.id === p.id)) || [];
+    // Merge products safely
+    const mergedProducts = mergeProducts([...defaultData.products, ...(saved.products || [])]);
 
     // Merge customers
-    const mergedCustomers = defaultData.customers.map(def => {
-      const existing = saved.customers?.find(c => c.id === def.id);
-      return existing ? { ...def, ...existing } : def;
-    });
-    const userCustomers = saved.customers?.filter(c => !defaultData.customers.find(d => d.id === c.id)) || [];
+    const mergedCustomers = [
+      ...defaultData.customers.map(def => {
+        const existing = saved.customers?.find(c => c.id === def.id);
+        return existing ? { ...def, ...existing } : def;
+      }),
+      ...(saved.customers?.filter(c => !defaultData.customers.find(d => d.id === c.id)) || [])
+    ];
 
     const mergedData = {
-      products: [...mergedProducts, ...userProducts],
-      customers: [...mergedCustomers, ...userCustomers],
+      products: mergedProducts,
+      customers: mergedCustomers,
       sales: saved.sales || [],
       transactions: saved.transactions || []
     };
@@ -87,39 +98,48 @@ function loadData() {
   }
 }
 
-// ✅ Save to localStorage
 function saveData(data) {
   localStorage.setItem(LS_KEY, JSON.stringify(data));
 }
 
+// ---------------- App Component ----------------
 export default function App() {
   const [module, setModule] = useState("dashboard");
   const [db, setDb] = useState(loadData());
 
-  // Auto-save when db changes
   useEffect(() => {
     saveData(db);
   }, [db]);
 
   // ---------------- Product Management ----------------
   function addProduct(product) {
+    if (!product.name || product.quantity <= 0) return;
+    const key = product.name.trim().toLowerCase();
+    const existing = db.products.find(p => p.name.trim().toLowerCase() === key);
+    if (existing) {
+      // Merge quantity safely
+      updateProduct(existing.id, { ...existing, quantity: existing.quantity + product.quantity });
+      return;
+    }
     const p = { ...product, id: "p" + Date.now() };
     setDb(prev => ({ ...prev, products: [...prev.products, p] }));
   }
+
   function updateProduct(id, updates) {
     const products = db.products.map(p => (p.id === id ? { ...p, ...updates } : p));
-    setDb({ ...db, products });
+    setDb(prev => ({ ...prev, products: mergeProducts(products) }));
   }
+
   function deleteProduct(id) {
-    const products = db.products.filter(p => p.id !== id);
-    setDb({ ...db, products });
+    setDb(prev => ({ ...prev, products: prev.products.filter(p => p.id !== id) }));
   }
+
   function restockProduct(id, quantity, note = "Restock") {
     if (quantity <= 0) return;
     const products = db.products.map(p =>
       p.id === id ? { ...p, quantity: p.quantity + quantity } : p
     );
-    setDb({ ...db, products });
+    setDb(prev => ({ ...prev, products: mergeProducts(products) }));
   }
 
   // ---------------- Sales Management ----------------
@@ -134,13 +154,11 @@ export default function App() {
       if (it.units > p.quantity) return { success: false, message: `Insufficient stock for ${p.name}` };
     }
 
-    // Deduct stock
     const products = db.products.map(p => {
       const item = items.find(i => i.productId === p.id);
       return item ? { ...p, quantity: p.quantity - item.units } : p;
     });
 
-    // Sale record
     const saleItems = items.map(i => {
       const p = productsMap.get(i.productId);
       return { productId: i.productId, name: p.name, units: i.units, price: p.price, lineTotal: p.price * i.units };
@@ -150,7 +168,6 @@ export default function App() {
     const sale = { id: "s" + Date.now(), items: saleItems, total, customerId, date: new Date().toISOString() };
     const sales = [...db.sales, sale];
 
-    // Transactions
     const transactions = [...db.transactions];
     saleItems.forEach(it => {
       transactions.push({
@@ -199,7 +216,6 @@ export default function App() {
     return filtered;
   }
 
-  // ✅ Common props for all modules
   const props = {
     products: db.products,
     customers: db.customers,
@@ -224,10 +240,10 @@ export default function App() {
         {module === "dashboard" && <Dashboard {...props} />}
         {module === "inventory" && <Inventory {...props} />}
         {module === "sales" && <Sales {...props} />}
-        {module === "customers" && <Customers {...props} />}    
-        {module === "reports" && <Reports {...props} />}   {/* ✅ fixed */}
+        {module === "customers" && <Customers {...props} />}
+        {module === "reports" && <Reports {...props} />}
       </main>
-      <Footer /> {/* 👈 Footer added here, visible on all modules */}
+      <Footer />
     </div>
   );
 }
