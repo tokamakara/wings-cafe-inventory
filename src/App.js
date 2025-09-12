@@ -1,3 +1,4 @@
+// App.js
 import React, { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import Dashboard from "./components/Dashboard";
@@ -9,33 +10,40 @@ import Footer from "./components/Footer";
 
 const LS_KEY = "wings_cafe_db_v1";
 
-// ---------------- Default Data ----------------
+// ✅ Default data (pre-seeded products & customers)
 const defaultData = {
   products: [
     // Beverages
-    { id: "b1", name: "Cappuccino", description: "Espresso with steamed milk and foam", category: "Beverage", price: 35, quantity: 30 },
-    { id: "b2", name: "Latte", description: "Espresso with steamed milk", category: "Beverage", price: 40, quantity: 25 },
-    { id: "b3", name: "Espresso", description: "Strong black coffee", category: "Beverage", price: 25, quantity: 20 },
-    { id: "b4", name: "Americano", description: "Espresso with hot water", category: "Beverage", price: 30, quantity: 20 },
-    { id: "b5", name: "Hot Chocolate", description: "Rich chocolate with steamed milk", category: "Beverage", price: 35, quantity: 15 },
-    { id: "b6", name: "Green Tea", description: "Refreshing green tea", category: "Beverage", price: 20, quantity: 25 },
+    { id: "b1", name: "Pepsi", description: "Refreshing cola-flavored soft drink", category: "Beverage", price: 23, quantity: 60 },
+    { id: "b2", name: "Coca Cola", description: "Classic carbonated soft drink", category: "Beverage", price: 20, quantity: 50 },
+    { id: "b3", name: "Reboost Energy Drink", description: "Energizing drink for active lifestyle", category: "Beverage", price: 35, quantity: 45 },
+    { id: "b4", name: "Fanta Orange", description: "Fruity and fizzy orange soda", category: "Beverage", price: 18, quantity: 70 },
+    { id: "b5", name: "Sprite", description: "Lemon-lime flavored carbonated drink", category: "Beverage", price: 19, quantity: 55 },
+    { id: "b6", name: "Appletiser", description: "Sparkling 100% apple juice beverage", category: "Beverage", price: 30, quantity: 40 },
+    { id: "b7", name: "Mountain Kingdom Drops", description: "Premium bottled water", category: "Beverage", price: 12, quantity: 100 },
+    { id: "b8", name: "Cappuccino", description: "Espresso with steamed milk and foam", category: "Beverage", price: 25, quantity: 35 },
+    { id: "b9", name: "Green Tea", description: "Refreshing green tea", category: "Beverage", price: 15, quantity: 60 },
+    { id: "b10", name: "Espresso", description: "Strong black coffee", category: "Beverage", price: 22, quantity: 50 },
+    { id: "b11", name: "Americano", description: "Espresso with hot water", category: "Beverage", price: 20, quantity: 45 },
+    { id: "b12", name: "Latte", description: "Espresso with steamed milk", category: "Beverage", price: 28, quantity: 30 },
+    { id: "b13", name: "Hot Chocolate", description: "Rich chocolate with steamed milk", category: "Beverage", price: 27, quantity: 25 },
 
     // Food
-    { id: "f1", name: "Blueberry Muffin", description: "Soft muffin with blueberries", category: "Food", price: 20, quantity: 20 },
-    { id: "f2", name: "Croissant", description: "Buttery French pastry", category: "Food", price: 25, quantity: 25 },
-    { id: "f3", name: "Ham & Cheese Sandwich", description: "Fresh sandwich with ham, cheese, and veggies", category: "Food", price: 50, quantity: 15 },
-    { id: "f4", name: "Chicken Wrap", description: "Grilled chicken with lettuce and sauce", category: "Food", price: 55, quantity: 15 },
-    { id: "f5", name: "Caesar Salad", description: "Fresh romaine with Caesar dressing", category: "Food", price: 45, quantity: 10 },
-
-    // Desserts
-    { id: "d1", name: "Chocolate Cake Slice", description: "Rich chocolate cake slice", category: "Dessert", price: 35, quantity: 10 },
-    { id: "d2", name: "Cheesecake Slice", description: "Creamy cheesecake with biscuit base", category: "Dessert", price: 40, quantity: 10 },
-    { id: "d3", name: "Ice Cream Scoop", description: "Vanilla or chocolate ice cream", category: "Dessert", price: 15, quantity: 20 },
+    { id: "f1", name: "Ham & Cheese Sandwich", description: "Fresh sandwich with ham, cheese, and veggies", category: "Food", price: 35, quantity: 20 },
+    { id: "f2", name: "Croissant", description: "Buttery French pastry", category: "Food", price: 18, quantity: 40 },
+    { id: "f3", name: "Blueberry Muffin", description: "Soft muffin with blueberries", category: "Food", price: 22, quantity: 30 },
+    { id: "f4", name: "Chicken Wrap", description: "Grilled chicken with lettuce and sauce", category: "Food", price: 40, quantity: 25 },
+    { id: "f5", name: "Caesar Salad", description: "Fresh romaine with Caesar dressing", category: "Food", price: 38, quantity: 15 },
 
     // Snacks
-    { id: "s1", name: "French Fries", description: "Crispy golden fries", category: "Snack", price: 25, quantity: 20 },
-    { id: "s2", name: "Onion Rings", description: "Fried onion rings with dip", category: "Snack", price: 30, quantity: 15 },
-    { id: "s3", name: "Mozzarella Sticks", description: "Cheesy fried sticks", category: "Snack", price: 35, quantity: 15 }
+    { id: "s1", name: "Mozzarella Sticks", description: "Cheesy fried sticks", category: "Snack", price: 28, quantity: 30 },
+    { id: "s2", name: "French Fries", description: "Crispy golden fries", category: "Snack", price: 20, quantity: 50 },
+    { id: "s3", name: "Onion Rings", description: "Fried onion rings with dip", category: "Snack", price: 25, quantity: 25 },
+
+    // Desserts
+    { id: "d1", name: "Ice Cream Scoop", description: "Vanilla or chocolate ice cream", category: "Dessert", price: 15, quantity: 35 },
+    { id: "d2", name: "Cheesecake Slice", description: "Creamy cheesecake with biscuit base", category: "Dessert", price: 30, quantity: 20 },
+    { id: "d3", name: "Chocolate Cake Slice", description: "Rich chocolate cake slice", category: "Dessert", price: 32, quantity: 18 },
   ],
   customers: [
     { id: "c1", name: "Thabo Mokoena", email: "mthabo@gmail.com", phone: "58000001" },
@@ -47,52 +55,36 @@ const defaultData = {
   transactions: []
 };
 
-// ---------------- LocalStorage helpers ----------------
-function mergeProducts(products) {
-  const map = new Map();
-  products.forEach(p => {
-    const key = p.name.trim().toLowerCase();
-    if (map.has(key)) {
-      const existing = map.get(key);
-      map.set(key, { ...p, quantity: existing.quantity + p.quantity, id: existing.id });
-    } else {
-      map.set(key, { ...p });
-    }
-  });
-  return Array.from(map.values());
-}
-
+// ✅ Load data from localStorage or merge with defaults
 function loadData() {
   try {
     const raw = localStorage.getItem(LS_KEY);
-
     if (!raw) {
-      // First time: save defaults
       localStorage.setItem(LS_KEY, JSON.stringify(defaultData));
       return defaultData;
     }
-
     const saved = JSON.parse(raw);
 
-    // Products → only use saved, no re-merging defaults
-    const mergedProducts = mergeProducts(saved.products || []);
+    // Merge products (avoid duplicates by id)
+    const mergedProducts = defaultData.products.map(def => {
+      const existing = saved.products?.find(p => p.id === def.id);
+      return existing ? { ...def, ...existing } : def;
+    });
+    const userProducts = saved.products?.filter(p => !defaultData.products.find(d => d.id === p.id)) || [];
 
-    // Customers → merge defaults with saved so initial customers remain
-    const mergedCustomers = [
-      ...defaultData.customers.map(def => {
-        const existing = saved.customers?.find(c => c.id === def.id);
-        return existing ? { ...def, ...existing } : def;
-      }),
-      ...(saved.customers?.filter(c => !defaultData.customers.find(d => d.id === c.id)) || [])
-    ];
+    // Merge customers
+    const mergedCustomers = defaultData.customers.map(def => {
+      const existing = saved.customers?.find(c => c.id === def.id);
+      return existing ? { ...def, ...existing } : def;
+    });
+    const userCustomers = saved.customers?.filter(c => !defaultData.customers.find(d => d.id === c.id)) || [];
 
     const mergedData = {
-      products: mergedProducts,
-      customers: mergedCustomers,
+      products: [...mergedProducts, ...userProducts],
+      customers: [...mergedCustomers, ...userCustomers],
       sales: saved.sales || [],
       transactions: saved.transactions || []
     };
-
     localStorage.setItem(LS_KEY, JSON.stringify(mergedData));
     return mergedData;
   } catch (e) {
@@ -102,14 +94,15 @@ function loadData() {
   }
 }
 
+// ✅ Save to localStorage
 function saveData(data) {
   localStorage.setItem(LS_KEY, JSON.stringify(data));
 }
 
-// ---------------- App Component ----------------
 export default function App() {
   const [module, setModule] = useState("dashboard");
   const [db, setDb] = useState(loadData());
+  const [period, setPeriod] = useState("all"); // shared period state
 
   useEffect(() => {
     saveData(db);
@@ -117,38 +110,28 @@ export default function App() {
 
   // ---------------- Product Management ----------------
   function addProduct(product) {
-    if (!product.name || product.quantity <= 0) return;
-    const key = product.name.trim().toLowerCase();
-    const existing = db.products.find(p => p.name.trim().toLowerCase() === key);
-    if (existing) {
-      updateProduct(existing.id, { ...existing, quantity: existing.quantity + product.quantity });
-      return;
-    }
     const p = { ...product, id: "p" + Date.now() };
     setDb(prev => ({ ...prev, products: [...prev.products, p] }));
   }
-
   function updateProduct(id, updates) {
     const products = db.products.map(p => (p.id === id ? { ...p, ...updates } : p));
-    setDb(prev => ({ ...prev, products: mergeProducts(products) }));
+    setDb({ ...db, products });
   }
-
   function deleteProduct(id) {
-    setDb(prev => ({ ...prev, products: prev.products.filter(p => p.id !== id) }));
+    const products = db.products.filter(p => p.id !== id);
+    setDb({ ...db, products });
   }
-
   function restockProduct(id, quantity, note = "Restock") {
     if (quantity <= 0) return;
     const products = db.products.map(p =>
       p.id === id ? { ...p, quantity: p.quantity + quantity } : p
     );
-    setDb(prev => ({ ...prev, products: mergeProducts(products) }));
+    setDb({ ...db, products });
   }
 
   // ---------------- Sales Management ----------------
   function processSale(items, customerId = null) {
     if (!items || items.length === 0) return { success: false, message: "No items" };
-
     const productsMap = new Map(db.products.map(p => [p.id, p]));
     for (const it of items) {
       const p = productsMap.get(it.productId);
@@ -233,7 +216,9 @@ export default function App() {
     updateCustomer,
     deleteCustomer,
     salesByPeriod,
-    setModule
+    setModule,
+    period,
+    setPeriod
   };
 
   return (

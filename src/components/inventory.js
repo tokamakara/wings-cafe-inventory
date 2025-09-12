@@ -7,9 +7,7 @@ export default function Inventory({ products, addProduct, updateProduct, deleteP
   const [editingId, setEditingId] = useState(null);
   const [notification, setNotification] = useState({ type: "", message: "" });
 
-  // ---------------- Add or Update Product ----------------
   function handleAddOrUpdate() {
-    // ---------- VALIDATIONS ----------
     if (!form.name || !form.price || !form.quantity) {
       setNotification({ type: "error", message: "Please fill name, price, and quantity." });
       return;
@@ -28,69 +26,42 @@ export default function Inventory({ products, addProduct, updateProduct, deleteP
     }
 
     const payload = { 
-      name: form.name.trim(), 
-      description: form.description.trim(), 
-      category: form.category.trim(), 
+      name: form.name, 
+      description: form.description, 
+      category: form.category, 
       price: Number(form.price), 
       quantity: Number(form.quantity) 
     };
 
-    // ---------- EDITING ----------
     if (editingId) {
       updateProduct(editingId, payload);
       setNotification({ type: "success", message: `Product "${form.name}" updated successfully!` });
       setEditingId(null);
     } else {
-      // ---------- MERGE DUPLICATES ----------
-      const existing = products.find(p => p.name.toLowerCase() === payload.name.toLowerCase());
-      if (existing) {
-        // Merge quantities if product exists
-        updateProduct(existing.id, { 
-          ...existing, 
-          quantity: existing.quantity + payload.quantity, 
-          description: payload.description || existing.description,
-          category: payload.category || existing.category,
-          price: payload.price || existing.price
-        });
-        setNotification({ type: "success", message: `Existing product "${payload.name}" updated (quantities merged)!` });
-      } else {
-        addProduct(payload);
-        setNotification({ type: "success", message: `Product "${payload.name}" added successfully!` });
-      }
+      addProduct(payload);
+      setNotification({ type: "success", message: `Product "${form.name}" added successfully!` });
     }
 
     setForm({ name: "", description: "", category: "", price: "", quantity: "" });
   }
 
-  // ---------------- Start Editing ----------------
   function startEdit(p) {
     setEditingId(p.id);
-    setForm({ 
-      name: p.name, 
-      description: p.description, 
-      category: p.category, 
-      price: p.price, 
-      quantity: p.quantity 
-    });
+    setForm({ name: p.name, description: p.description, category: p.category, price: p.price, quantity: p.quantity });
     setNotification({ type: "", message: "" });
     window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
   }
 
-  // ---------------- Restock Product ----------------
   function handleRestockPrompt(p) {
-    const qty = Number(prompt(`Enter restock quantity for "${p.name}"`));
-    if (!qty || qty <= 0) {
+    const qty = prompt(`Enter restock quantity for "${p.name}"`);
+    const numQty = Number(qty);
+    if (!numQty || numQty <= 0) {
       setNotification({ type: "error", message: "Invalid restock quantity." });
       return;
     }
-    restockProduct(p.id, qty);
-    setNotification({ type: "success", message: `Restocked ${qty} units for "${p.name}".` });
+    restockProduct(p.id, numQty);
+    setNotification({ type: "success", message: `Restocked ${numQty} units for "${p.name}".` });
   }
-
-  // ---------- Deduplicate products before rendering ----------
-  const uniqueProducts = Array.from(new Map(
-    products.map(p => [p.name.toLowerCase(), p])
-  ).values());
 
   return (
     <div className="inventory">
@@ -103,11 +74,16 @@ export default function Inventory({ products, addProduct, updateProduct, deleteP
           <table className="table">
             <thead>
               <tr>
-                <th>Name</th><th>Description</th><th>Category</th><th>Price</th><th>Quantity</th><th>Actions</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {uniqueProducts.map(p => (
+              {products.map(p => (
                 <tr key={p.id}>
                   <td>{p.name}</td>
                   <td>{p.description}</td>
@@ -116,34 +92,70 @@ export default function Inventory({ products, addProduct, updateProduct, deleteP
                   <td>{p.quantity}</td>
                   <td>
                     <button className="btn ghost" onClick={() => startEdit(p)}>Update</button>
-                    <button className="btn danger" onClick={() => { if (window.confirm("Delete product?")) deleteProduct(p.id); }}>Delete</button>
+                    <button className="btn danger" onClick={() => { if(window.confirm("Delete product?")) deleteProduct(p.id); }}>Delete</button>
                     <button className="btn primary" onClick={() => handleRestockPrompt(p)}>Restock</button>
                   </td>
                 </tr>
               ))}
-              {uniqueProducts.length === 0 && <tr><td colSpan="6" className="small">No products available.</td></tr>}
+              {products.length === 0 && (
+                <tr>
+                  <td colSpan="6" className="small">No products available.</td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
       </div>
 
       {/* Notification */}
-      {notification.message && 
-        <Notification type={notification.type} message={notification.message} onClose={() => setNotification({ type: "", message: "" })} />
-      }
+      {notification.message && (
+        <Notification
+          type={notification.type}
+          message={notification.message}
+          onClose={() => setNotification({ type: "", message: "" })}
+        />
+      )}
 
       {/* Add / Update Form */}
       <div className="card add-product-card">
         <h3>{editingId ? "Update Product" : "Add New Product"}</h3>
         <div className="form-row">
-          <input placeholder="Product name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value.replace(/[^A-Za-z\s]/g, "") })} />
-          <input placeholder="Description" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
-          <input placeholder="Category" value={form.category} onChange={e => setForm({ ...form, category: e.target.value })} />
-          <input placeholder="Price (LSL)" type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value.replace(/[^\d.]/g, "") })} />
-          <input placeholder="Initial quantity" type="number" value={form.quantity} onChange={e => setForm({ ...form, quantity: e.target.value.replace(/[^\d]/g, "") })} />
+          <input
+            placeholder="Product name"
+            value={form.name}
+            onChange={e => setForm({ ...form, name: e.target.value.replace(/[^A-Za-z\s]/g, "") })}
+          />
+          <input
+            placeholder="Description"
+            value={form.description}
+            onChange={e => setForm({ ...form, description: e.target.value })}
+          />
+          <input
+            placeholder="Category"
+            value={form.category}
+            onChange={e => setForm({ ...form, category: e.target.value })}
+          />
+          <input
+            placeholder="Price (LSL)"
+            type="number"
+            value={form.price}
+            onChange={e => setForm({ ...form, price: e.target.value.replace(/[^\d.]/g, "") })}
+          />
+          <input
+            placeholder="Initial quantity"
+            type="number"
+            value={form.quantity}
+            onChange={e => setForm({ ...form, quantity: e.target.value.replace(/[^\d]/g, "") })}
+          />
           <div className="form-buttons">
-            <button className="btn primary" onClick={handleAddOrUpdate}>{editingId ? "Save" : "Add"}</button>
-            {editingId && <button className="btn ghost" onClick={() => setEditingId(null) || setForm({ name: "", description: "", category: "", price: "", quantity: "" })}>Cancel</button>}
+            <button className="btn primary" onClick={handleAddOrUpdate}>
+              {editingId ? "Save" : "Add"}
+            </button>
+            {editingId && (
+              <button className="btn ghost" onClick={() => setEditingId(null) || setForm({ name: "", description: "", category: "", price: "", quantity: "" })}>
+                Cancel
+              </button>
+            )}
           </div>
         </div>
       </div>

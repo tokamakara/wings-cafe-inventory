@@ -1,37 +1,86 @@
+/* ---------------- Page Title ---------------- */
 .sales-page h1 {
   margin-bottom: 20px;
   color: #333;
+  font-size: 1.8rem;
 }
 
-.add-product-card, .cart-card {
+/* ---------------- Cards ---------------- */
+.add-product-card,
+.cart-card {
   background-color: #fff;
   padding: 18px;
   margin-bottom: 20px;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
+.add-product-card:hover,
+.cart-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+}
+
+/* ---------------- Add Product Form ---------------- */
 .add-product-form {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   align-items: center;
+  position: relative; /* for autocomplete dropdown */
 }
 
-.add-product-form input,
-.add-product-form select {
-  padding: 8px;
-  border-radius: 6px;
+/* ===== Inputs & Select ===== */
+.add-product-form input[type="text"],
+.add-product-form select,
+.add-product-form input[type="number"] {
+  padding: 12px 14px;
+  font-size: 16px;
+  border-radius: 8px;
   border: 1px solid #ccc;
+  min-width: 180px;
+  box-sizing: border-box;
+  transition: all 0.2s ease-in-out;
 }
 
+.add-product-form input[type="number"] {
+  max-width: 110px;
+}
+
+.add-product-form input[type="text"]:focus,
+.add-product-form select:focus,
+.add-product-form input[type="number"]:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 6px rgba(74, 144, 226, 0.35);
+}
+
+/* ===== Add Product Button ===== */
 .add-product-form button {
-  padding: 8px 14px;
+  padding: 10px 16px;
+  font-size: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
+.add-product-form button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.add-product-form button:hover:not(:disabled) {
+  background-color: #0056b3;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* ---------------- Cart List ---------------- */
 .cart-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .cart-item {
@@ -39,18 +88,28 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
-  padding: 6px 0;
+  padding: 8px 0;
   border-bottom: 1px solid #eee;
 }
 
 .cart-item-info input {
   width: 60px;
   margin: 0 6px;
-  padding: 4px 6px;
+  padding: 6px 8px;
   border-radius: 4px;
   border: 1px solid #ccc;
+  text-align: center;
 }
 
+/* Low stock highlight */
+.cart-item-info input.low-stock,
+.cart-item-info input.near-zero {
+  border-color: #ff4d4f;
+  color: #ff4d4f;
+  font-weight: 600;
+}
+
+/* ---------------- Cart Summary ---------------- */
 .cart-summary {
   margin-top: 12px;
 }
@@ -63,22 +122,26 @@
 
 .cart-summary select {
   width: 100%;
-  padding: 8px;
+  padding: 10px 12px;
   border-radius: 6px;
   border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
 .cart-summary .total {
   margin-top: 8px;
-  font-size: 1.05rem;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
+/* ---------------- Buttons ---------------- */
 .btn.primary {
   background-color: #007bff;
   color: #fff;
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
 }
 
 .btn.ghost {
@@ -86,6 +149,7 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   cursor: pointer;
+  transition: all 0.2s;
 }
 
 .btn.small {
@@ -95,30 +159,34 @@
 
 .btn.primary:hover {
   background-color: #0056b3;
+  transform: translateY(-1px);
 }
 
 .btn.ghost:hover {
   background-color: #f2f2f2;
 }
 
-/* ===== Autocomplete Dropdown Styles ===== */
+/* ---------------- Autocomplete Dropdown ---------------- */
 .autocomplete-dropdown {
   position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
   background: #fff;
   border: 1px solid #ccc;
   border-radius: 6px;
-  width: 100%;
   max-height: 200px;
   overflow-y: auto;
-  margin-top: 2px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  margin-top: 4px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
   z-index: 1000;
   list-style: none;
   padding: 0;
+  transition: all 0.2s ease-in-out;
 }
 
 .autocomplete-dropdown li {
-  padding: 8px 10px;
+  padding: 10px 12px;
   cursor: pointer;
   transition: background 0.2s;
 }
@@ -127,12 +195,81 @@
   background-color: #f2f2f2;
 }
 
-.add-product-form {
-  position: relative; /* ensure dropdown is positioned correctly */
-}
-
 .autocomplete-dropdown li.active {
   background-color: #007bff;
   color: #fff;
 }
 
+/* ---------------- Low Stock ---------------- */
+.add-product-form select option[data-low-stock="true"] {
+  color: #ff4d4f;
+  font-weight: 600;
+}
+
+.add-product-form select option[data-out-of-stock="true"] {
+  color: #aaa;
+}
+
+/* Low-stock tooltip */
+.low-stock-notice {
+  color: #ff4d4f;
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 800px) {
+  .add-product-form {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .add-product-form input[type="text"],
+  .add-product-form select,
+  .add-product-form input[type="number"],
+  .cart-summary select {
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .cart-item-info input {
+    width: 50px;
+  }
+}
+
+@media (max-width: 500px) {
+  .sales-page h1 {
+    font-size: 1.5rem;
+  }
+
+  .add-product-form input[type="text"],
+  .add-product-form select,
+  .add-product-form input[type="number"] {
+    padding: 10px 12px;
+    font-size: 15px;
+  }
+
+  .add-product-form button {
+    padding: 8px 14px;
+    font-size: 14px;
+  }
+
+  /* Ensure dropdown never overlaps cart or button */
+  .autocomplete-dropdown {
+    max-height: 180px;
+    margin-bottom: 10px;
+  }
+}
+
+/* Extra safeguard: mobile dropdown scroll & shadow */
+@media (max-width: 400px) {
+  .autocomplete-dropdown {
+    max-height: 150px;
+    font-size: 14px;
+    padding: 0;
+  }
+
+  .autocomplete-dropdown li {
+    padding: 8px 10px;
+  }
+}
