@@ -1,13 +1,24 @@
 {
   "files": {
-    "main.css": "/wings-cafe-inventory/static/css/main.4a8209d5.css",
-    "main.js": "/wings-cafe-inventory/static/js/main.b01acce9.js",
+    "main.css": "/wings-cafe-inventory/static/css/main.fe0ed8f1.css",
+    "main.js": "/wings-cafe-inventory/static/js/main.1676856b.js",
+    "static/media/Blueberry_Muffin.jpeg": "/wings-cafe-inventory/static/media/Blueberry_Muffin.222226869ef6bde909fe.jpeg",
+    "static/media/Caesar_Salad.jpeg": "/wings-cafe-inventory/static/media/Caesar_Salad.d8af4fe6ebd6b8d69f32.jpeg",
+    "static/media/Espresso.jpeg": "/wings-cafe-inventory/static/media/Espresso.0d67e5cec3b79c611569.jpeg",
+    "static/media/Pepsi.jpeg": "/wings-cafe-inventory/static/media/Pepsi.8851da3d23776636a4c9.jpeg",
+    "static/media/Coca_Cola.jpeg": "/wings-cafe-inventory/static/media/Coca_Cola.b3a670c44e627318bf70.jpeg",
+    "static/media/Mozzarella_Sticks.jpeg": "/wings-cafe-inventory/static/media/Mozzarella_Sticks.4c31e473a066bb2842da.jpeg",
+    "static/media/Chicken_Wrap.jpeg": "/wings-cafe-inventory/static/media/Chicken_Wrap.3602cfc1e4f94786c492.jpeg",
+    "static/media/Chocolate_Cake_Slice.jpeg": "/wings-cafe-inventory/static/media/Chocolate_Cake_Slice.480564a0318d6b788aa2.jpeg",
+    "static/media/Croissant.jpeg": "/wings-cafe-inventory/static/media/Croissant.d33dc9a065bd85d1e131.jpeg",
+    "static/media/Reboost_Energy_Drink.jpeg": "/wings-cafe-inventory/static/media/Reboost_Energy_Drink.7e046c487f4b400dbf6a.jpeg",
+    "static/media/Onion_Rings.jpeg": "/wings-cafe-inventory/static/media/Onion_Rings.5067f3952f7ea26a0ef4.jpeg",
     "index.html": "/wings-cafe-inventory/index.html",
-    "main.4a8209d5.css.map": "/wings-cafe-inventory/static/css/main.4a8209d5.css.map",
-    "main.b01acce9.js.map": "/wings-cafe-inventory/static/js/main.b01acce9.js.map"
+    "main.fe0ed8f1.css.map": "/wings-cafe-inventory/static/css/main.fe0ed8f1.css.map",
+    "main.1676856b.js.map": "/wings-cafe-inventory/static/js/main.1676856b.js.map"
   },
   "entrypoints": [
-    "static/css/main.4a8209d5.css",
-    "static/js/main.b01acce9.js"
+    "static/css/main.fe0ed8f1.css",
+    "static/js/main.1676856b.js"
   ]
 }
