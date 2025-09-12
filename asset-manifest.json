@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/wings-cafe-inventory/static/css/main.4a8209d5.css",
-    "main.js": "/wings-cafe-inventory/static/js/main.85c74ea8.js",
+    "main.js": "/wings-cafe-inventory/static/js/main.b01acce9.js",
     "index.html": "/wings-cafe-inventory/index.html",
     "main.4a8209d5.css.map": "/wings-cafe-inventory/static/css/main.4a8209d5.css.map",
-    "main.85c74ea8.js.map": "/wings-cafe-inventory/static/js/main.85c74ea8.js.map"
+    "main.b01acce9.js.map": "/wings-cafe-inventory/static/js/main.b01acce9.js.map"
   },
   "entrypoints": [
     "static/css/main.4a8209d5.css",
-    "static/js/main.85c74ea8.js"
+    "static/js/main.b01acce9.js"
   ]
 }
