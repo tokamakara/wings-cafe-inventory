@@ -9,7 +9,7 @@ import Footer from "./components/Footer";
 
 const LS_KEY = "wings_cafe_db_v1";
 
-// Default data
+// ---------------- Default Data ----------------
 const defaultData = {
   products: [
     // Beverages
@@ -65,16 +65,19 @@ function mergeProducts(products) {
 function loadData() {
   try {
     const raw = localStorage.getItem(LS_KEY);
+
     if (!raw) {
+      // First time: save defaults
       localStorage.setItem(LS_KEY, JSON.stringify(defaultData));
       return defaultData;
     }
+
     const saved = JSON.parse(raw);
 
-    // Merge products safely
-    const mergedProducts = mergeProducts([...defaultData.products, ...(saved.products || [])]);
+    // Products → only use saved, no re-merging defaults
+    const mergedProducts = mergeProducts(saved.products || []);
 
-    // Merge customers
+    // Customers → merge defaults with saved so initial customers remain
     const mergedCustomers = [
       ...defaultData.customers.map(def => {
         const existing = saved.customers?.find(c => c.id === def.id);
@@ -89,6 +92,7 @@ function loadData() {
       sales: saved.sales || [],
       transactions: saved.transactions || []
     };
+
     localStorage.setItem(LS_KEY, JSON.stringify(mergedData));
     return mergedData;
   } catch (e) {
@@ -117,7 +121,6 @@ export default function App() {
     const key = product.name.trim().toLowerCase();
     const existing = db.products.find(p => p.name.trim().toLowerCase() === key);
     if (existing) {
-      // Merge quantity safely
       updateProduct(existing.id, { ...existing, quantity: existing.quantity + product.quantity });
       return;
     }
